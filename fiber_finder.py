@@ -10,8 +10,8 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from bs4 import BeautifulSoup
 
-#browser = webdriver.Firefox()
-#browser.get('http://trulia.com')
+browser = webdriver.Firefox()
+browser.get('http://switchtosmithville.com/check-availability/')
 
 bloom = 'Bloomington, IN'
 iu = '107 S. Indiana Avenue'
@@ -19,6 +19,17 @@ iu = '107 S. Indiana Avenue'
 bloom_zip_min = 47401
 bloom_zip_max = 47408
 out = {}
+
+def lookup(address, city, zip):
+    addr_input = browser.find_element_by_id('street_address')
+    addr_input.send_keys(address)
+    city_ipnut = browser.find_element_by_id('city')
+    city_ipnut.send_keys(city)
+    zip_input = browser.find_element_by_id('zip')
+    zip_input.send_keys(zip)
+    submit = find_element_by_name('name')
+    submit.click()
+
 
 url = 'http://www.trulia.com/for_sale/{}_zip/'.format(str(bloom_zip_min))
 with urllib.request.urlopen(url) as response:
@@ -35,7 +46,9 @@ with urllib.request.urlopen(url) as response:
                     out['state'] = result[-2]
                     out['city'] = result[-3]
                     out['address'] = ' '.join(result[1:-2])
+                    lookup(out['address'], out['city']. out['zip'])
                     print(out)
+                    break
 
         except AttributeError as err:
             print('LOL', err)
