@@ -20,16 +20,6 @@ bloom_zip_min = 47401
 bloom_zip_max = 47408
 out = {}
 
-def lookup(address, city, zip):
-    addr_input = browser.find_element_by_id('street_address')
-    addr_input.send_keys(address)
-    city_ipnut = browser.find_element_by_id('city')
-    city_ipnut.send_keys(city)
-    zip_input = browser.find_element_by_id('zip')
-    zip_input.send_keys(zip)
-    submit = find_element_by_name('name')
-    submit.click()
-
 
 url = 'http://www.trulia.com/for_sale/{}_zip/'.format(str(bloom_zip_min))
 with urllib.request.urlopen(url) as response:
@@ -46,12 +36,42 @@ with urllib.request.urlopen(url) as response:
                     out['state'] = result[-2]
                     out['city'] = result[-3]
                     out['address'] = ' '.join(result[1:-2])
-                    lookup(out['address'], out['city']. out['zip'])
-                    print(out)
+                    addr_input = browser.find_element_by_id('street_address')
+                    addr_input.send_keys(out['address'])
+                    city_input = browser.find_element_by_id('city')
+                    city_input.send_keys(out['city'])
+                    zip_input = browser.find_element_by_id('zip')
+                    zip_input.send_keys(out['zip'])
+                    #with urllib.request.urlopen('http://switchtosmithville.com/check-availability/') as smith_response:
+                    #    smith_html = smith_response.read()
+                    #    smith_parse = BeautifulSoup(smith_html, 'html.parser')
+                    #    for link in smith_parse.find_all('div'):
+                    #        print(link)
+                    #css = browser.find_element_by_css_selector("div.input.map-calculate-button[value='Submit']")
+                    #css = browser.find_element_by_css_selector("div.map-calculate-button[value='Submit']")
+
+                    #link = browser.find_element_by_xpath(u'div//a[contains(text(), "Submit")]')
+                    #link.click()
+                    #submit = browser.find_element_by_class_name('map-form')
+                    #submit = browser.find_element_by_class_name('map-calculate button')
+                    #inputs = browser.find_elements_by_class_name('map-calculate button')
+                    #submit.click()
+                    #print(inputs)
+                    #print(out)
+                    #css.click()
+                    ids = browser.find_elements_by_xpath('//*[@class]')
+                    for ii in ids:
+                    #print ii.tag_name
+                        if ii.get_attribute('class').startswith('map-calculate'):
+                            print(ii.get_attribute('class'))
+                            ii.click()
+                        #ii.submit()
+                        print(ii.get_attribute('class'))
+                    #submit =
                     break
 
         except AttributeError as err:
-            print('LOL', err)
+            print(err)
             #if 'property' in result:
             #    print(result)
 #        if link.get('content').startswith('/property'):
